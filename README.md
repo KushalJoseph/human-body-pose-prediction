@@ -1,0 +1,13 @@
+# Human Body Pose Forecasting
+- This project aims to predict future human body poses given a sequence of past poses.
+- The poses will be represented using the **SMPL parameterized body model** as encoded into a latent vector space using **Vposer**
+- We use pose sequences from a subset of the **AMASS dataset** to model our problem as a **time-series prediction problem** in the VPoser latent space.
+- The pose sequences are sliced into **non-overlapping windows**, and converted into pairs (X, y), X being an 'input' sequence, and y being the 'ground truth' future sequence. 
+- We train a **bidirectional-GRU encoder-decoder architecture** on the dataset formed with (X, y) pairs above for this prediction task.
+- The evaluation metrics include
+   - **MPJPE** (Mean Per Join Position Error) which measures how far off a model’s **predicted joint positions** are from the **ground-truth joint positions**.
+   - MSE loss in VPoser latent space
+- The training loss function is a weighted sum of MPJPE/MSE, and adds a penalty for "velocity" between frames, leading to a smoother prediction, without "abrupt" changes.
+- Finally, after our model is trained and evaluated, we generate **GLB files**, which can be viewed using an online GLTF viewer. GLB files are basically compact binary containers for 3D scenes.
+- The above files are also viewable in the Python Notebook (last cell)
+- Despite using a small subset of 100 pose sequences from AMASS, our model outperformed some baselines, which predict a "constant velocity" between frames.
